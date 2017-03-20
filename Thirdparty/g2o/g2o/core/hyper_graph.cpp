@@ -150,10 +150,18 @@ namespace g2o {
 
   void HyperGraph::clear()
   {
-    for (VertexIDMap::iterator it=_vertices.begin(); it!=_vertices.end(); ++it)
+    /*
+     * HACK(jpilet)  I encountered double-free errors here. Commenting out
+     * those lines cause a memory leak, but at least I can run the code, now.
+     */
+  if (false) {
+    for (VertexIDMap::iterator it=_vertices.begin(); it!=_vertices.end(); ++it) {
       delete (it->second);
-    for (EdgeSet::iterator it=_edges.begin(); it!=_edges.end(); ++it)
+    }
+    for (EdgeSet::iterator it=_edges.begin(); it!=_edges.end(); ++it) {
       delete (*it);
+    }
+  }
     _vertices.clear();
     _edges.clear();
   }
